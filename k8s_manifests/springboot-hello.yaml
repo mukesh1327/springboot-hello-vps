@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  
+  name: springboot-hello
+
+  labels:
+    app: springboot-hello
+    app.openshift.io/runtime: spring-boot
+
+spec:
+
+  replicas: 1
+
+  selector:
+    matchLabels:
+        app: springboot-hello
+
+  template:
+    metadata:
+      labels: 
+        app: springboot-hello
+
+    spec:
+
+      containers:
+        - name: hello-springboot
+
+          image: 'quay.io/mukeshs1306/springboot-hello:latest'
+
+          ports:
+            - name: http
+              containerPort: 9001
+              protocol: TCP
+
+          env:
+            - name: TITLw
+              valueFrom:
+                secretKeyRef:
+                  name: springboot-hello
+                  key: TITLw
+
+
+---
+
+kind: Secret
+apiVersion: v1
+metadata:
+  name: springboot-hello
+data:
+  TITLE: dGl0bGUK==
+type: Opaque
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-hello
+  labels:
+    app: springboot-hello
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9001
+      targetPort: 9001
+      protocol: TCP
+      name: 9001-http
+  selector:
+    app: springboot-hello
+
+---
+
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: springboot-hello
+spec:
+  subdomain: springboot-hello
+  to:
+    kind: Service
+    name: springboot-hello
+    weight: 100
+  port:
+    targetPort: 9001-tcp
+  wildcardPolicy: None
