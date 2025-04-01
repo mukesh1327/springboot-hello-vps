@@ -1,15 +1,19 @@
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
-  name: springboot-hello
+  name: springboot-hello-app
   labels:
-    app: springboot-hello
+    app: springboot-hello-app
+    app.kubernetes.io/name: springboot-hello-app
+    app.kubernetes.io/part-of: java-apps
+    app.openshift.io/runtime: springboot
 spec:
-  type: ClusterIP
   ports:
-    - port: 9001
-      targetPort: 9001
+    - name: 9001-tcp
       protocol: TCP
-      name: 9001-http
+      port: 9001
+      targetPort: 9001
+  type: ClusterIP
   selector:
-    app: springboot-hello
+    app: springboot-hello-app
+    deployment: springboot-hello-app

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/vps-welcome")
 public class HelloWorldController {
 
     private static final String IMAGE_URL = "/images/noventiq-vp.png"; // Serve a fixed image
@@ -19,7 +19,7 @@ public class HelloWorldController {
         return "Hello, World!";
     }
 
-    @GetMapping("/vpsdemo")
+    @GetMapping("")
     public String getImageHtml() {
         return "<html>" +
                 "<head><title>Image Viewer</title></head>" +
